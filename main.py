@@ -30,12 +30,15 @@ def get_keyword_results():
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root'))
         )
-        table = driver.find_element(By.CSS_SELECTOR, 'tbody.MuiTableBody-root')
-        rows = table.find_elements(By.CSS_SELECTOR, 'tr')
+         WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.ID, "download-keywords"))
+         )
+        table = driver.find_element(By.CSS_SELECTOR, "tbody.MuiTableBody-root")
+        rows = table.find_elements(By.CSS_SELECTOR, "tr")
 
         table_data = []
         for row in rows:
-            cells = row.find_elements(By.TAG_NAME, 'th, td')
+            cells = row.find_elements(By.TAG_NAME, "th") + row.find_elements(By.TAG_NAME, "td")
             row_data = {
                 "keyword": cells[0].text,
                 "search_volume": cells[1].text,
@@ -45,8 +48,8 @@ def get_keyword_results():
             }
             table_data.append(row_data)
 
+        return {"data": table_data}
         driver.quit()
-        return jsonify(table_data)
 
     except Exception as e:
         driver.quit()

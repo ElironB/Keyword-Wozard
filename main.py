@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import os
 
 app = Flask(__name__)
 
@@ -39,9 +40,4 @@ def get_keyword_results():
         driver.quit()
         return jsonify(table_data)
 
-    except Exception as e:
-        driver.quit()
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+   

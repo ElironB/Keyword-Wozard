@@ -26,16 +26,18 @@ def get_keyword_results():
             EC.element_to_be_clickable((By.ID, 'refine-continue'))
         ).click()
 
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root'))
         )
+        table = driver.find_element(By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root')
+        rows = table.find_elements(By.CSS_SELECTOR, 'tr')
 
         table_data = []
-        rows = driver.find_elements(By.TAG_NAME, 'tr')
         for row in rows:
-            cells = row.find_elements(By.TAG_NAME, 'th') + row.find_elements(By.TAG_NAME, 'td')
-            row_data = [cell.text for cell in cells]
-            table_data.append(row_data)
+            cells = row.find_elements(By.CSS_SELECTOR, 'th, td')
+            row_data = [cell.text for cell in cells if cell.text]  # Exclude empty strings
+            if row_data:
+                table_data.append(row_data)
 
         driver.quit()
         return jsonify(table_data)

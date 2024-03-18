@@ -40,4 +40,14 @@ def get_keyword_results():
         driver.quit()
         return jsonify(table_data)
 
-   
+    except Exception as e:
+        driver.quit()
+        return jsonify({'error': str(e)}), 500
+
+if __name__ == '__main__':
+    # Set the FLASK_ENV environment variable to 'development' to enable debug mode
+    env = os.environ.get('FLASK_ENV', 'production')
+    if env == 'development':
+        app.run(debug=True, host='0.0.0.0')
+    else:
+        app.run(host='0.0.0.0')

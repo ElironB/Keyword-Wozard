@@ -1,3 +1,2 @@
-flask
-selenium
-chromedriver-autoinstaller
+Flask==2.0.2
+selenium==4.1.0

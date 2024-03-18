@@ -17,6 +17,7 @@ def get_keyword_results():
     options.add_argument('--headless')
     options.add_argument('--disable-gpu')
     options.add_argument('--no-sandbox')
+    options.add_argument('--disable-images')
 
     driver = webdriver.Chrome(options=options)
     driver.get(url)
@@ -29,15 +30,20 @@ def get_keyword_results():
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root'))
         )
-        table = driver.find_element(By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root')
+        table = driver.find_element(By.CSS_SELECTOR, 'tbody.MuiTableBody-root')
         rows = table.find_elements(By.CSS_SELECTOR, 'tr')
 
         table_data = []
         for row in rows:
-            cells = row.find_elements(By.CSS_SELECTOR, 'th, td')
-            row_data = [cell.text for cell in cells if cell.text]  # Exclude empty strings
-            if row_data:
-                table_data.append(row_data)
+            cells = row.find_elements(By.TAG_NAME, 'th, td')
+            row_data = {
+                "keyword": cells[0].text,
+                "search_volume": cells[1].text,
+                "cpc_low": cells[2].text,
+                "cpc_high": cells[3].text,
+                "competition": cells[4].text
+            }
+            table_data.append(row_data)
 
         driver.quit()
         return jsonify(table_data)

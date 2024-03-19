@@ -36,7 +36,7 @@ def get_keyword_results():
         print("Table Loaded")
         table_data = []
         rows = driver.find_elements(By.CSS_SELECTOR, 'tbody.sc-hQRsPl.hkwLLR.MuiTableBody-root tr')
-            for row in rows:
+        for row in rows:
                 cols = row.find_elements(By.CSS_SELECTOR, 'th, td')
                 row_data = {
                     "keyword": cells[0].text,
@@ -47,7 +47,7 @@ def get_keyword_results():
                 }
                 table_data.append(row_data)
     
-            return jsonify(table_data)   
+        return jsonify(table_data)   
         driver.quit()
 
     except Exception as e:

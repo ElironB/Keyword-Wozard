@@ -27,37 +27,44 @@ def get_keyword_results():
             EC.element_to_be_clickable((By.ID, 'refine-continue'))
         ).click()
         print("Button Clicked")
+
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root'))
         )
+
         WebDriverWait(driver, 20).until_not(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'p.sc-bczRLJ.jDmpHO.MuiTypography-root'))
-        )    
+        )
+
         print("Table Loaded")
+
         table_data = []
         rows = driver.find_elements(By.CSS_SELECTOR, 'tbody.sc-hQRsPl.hkwLLR.MuiTableBody-root tr')
         for row in rows:
-                cols = row.find_elements(By.CSS_SELECTOR, 'th, td')
-                row_data = {
-                    "keyword": cells[0].text,
-                    "search_volume": cells[1].text,
-                    "cpc_low": cells[2].text,
-                    "cpc_high": cells[3].text,
-                    "competition": cells[4].text
-                }
-                table_data.append(row_data)
+            cols = row.find_elements(By.CSS_SELECTOR, 'th, td')
+            row_data = {
+                "keyword": cols[0].text,
+                "search_volume": cols[1].text,
+                "cpc_low": cols[2].text,
+                "cpc_high": cols[3].text,
+                "competition": cols[4].text
+            }
+            table_data.append(row_data)
+
         if table_data:
             return jsonify(table_data)
         elif rows:
-            rows_list = list(rows)  # Convert rows to a list
+            rows_list = [row.text for row in rows]  # Convert rows to a list of text
             return jsonify(rows_list)
         else:
             return jsonify({'Failed to extract data :('}), 500
-        driver.quit()
 
     except Exception as e:
         driver.quit()
         return jsonify({'error': str(e)}), 500
+
+    finally:
+        driver.quit()
 
 if __name__ == '__main__':
     # Set the FLASK_ENV environment variable to 'development' to enable debug mode

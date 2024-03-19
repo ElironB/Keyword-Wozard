@@ -47,11 +47,12 @@ def get_keyword_results():
                 }
                 table_data.append(row_data)
         if table_data:
-            return jsonify(table_data)  
+            return jsonify(table_data)
         elif rows:
-            return jsonify(rows)    
+            rows_list = list(rows)  # Convert rows to a list
+            return jsonify(rows_list)
         else:
-            return ({'Failed to extract data :('})
+            return jsonify({'Failed to extract data :('}), 500
         driver.quit()
 
     except Exception as e:

@@ -53,9 +53,6 @@ def get_keyword_results():
 
         if table_data:
             return jsonify(table_data)
-        elif rows:
-            rows_list = [row.text for row in rows]  # Convert rows to a list of text
-            return jsonify(rows_list)
         else:
             return jsonify({'Failed to extract data :('}), 500
 

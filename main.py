@@ -26,28 +26,28 @@ def get_keyword_results():
         WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, 'refine-continue'))
         ).click()
-
+        print("Button Clicked")
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root'))
         )
         WebDriverWait(driver, 20).until_not(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'p.sc-bczRLJ.jDmpHO.MuiTypography-root'))
         )    
-        
+        print("Table Loaded")
         table_data = []
         rows = driver.find_elements(By.CSS_SELECTOR, 'tbody.sc-hQRsPl.hkwLLR.MuiTableBody-root tr')
-        for row in rows:
-            cells = row.find_elements(By.TAG_NAME, "th") + row.find_elements(By.TAG_NAME, "td")
-            row_data = {
-                "keyword": cells[0].text,
-                "search_volume": cells[1].text,
-                "cpc_low": cells[2].text,
-                "cpc_high": cells[3].text,
-                "competition": cells[4].text
-            }
-            table_data.append(row_data)
-
-        return {"data": table_data}
+            for row in rows:
+                cols = row.find_elements(By.CSS_SELECTOR, 'th, td')
+                row_data = {
+                    "keyword": cells[0].text,
+                    "search_volume": cells[1].text,
+                    "cpc_low": cells[2].text,
+                    "cpc_high": cells[3].text,
+                    "competition": cells[4].text
+                }
+                table_data.append(row_data)
+    
+            return jsonify(table_data)   
         driver.quit()
 
     except Exception as e:

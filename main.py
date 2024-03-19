@@ -46,8 +46,12 @@ def get_keyword_results():
                     "competition": cells[4].text
                 }
                 table_data.append(row_data)
-    
-        return jsonify(table_data)   
+        if table_data:
+            return jsonify(table_data)  
+        elif rows:
+            return jsonify(rows)    
+        else:
+            return ({'Failed to extract data :('})
         driver.quit()
 
     except Exception as e:

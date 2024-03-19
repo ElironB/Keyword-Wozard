@@ -30,13 +30,12 @@ def get_keyword_results():
         WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 'table.sc-bTmccw.cFltLW.MuiTable-root'))
         )
-        WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.ID, "download-keywords"))
-         )
-        table = driver.find_element(By.CSS_SELECTOR, "tbody.MuiTableBody-root")
-        rows = table.find_elements(By.TAG_NAME, "tr")
-
+        WebDriverWait(driver, 20).until_not(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 'p.sc-bczRLJ.jDmpHO.MuiTypography-root'))
+        )    
+        
         table_data = []
+        rows = driver.find_elements(By.CSS_SELECTOR, 'tbody.sc-hQRsPl.hkwLLR.MuiTableBody-root tr')
         for row in rows:
             cells = row.find_elements(By.TAG_NAME, "th") + row.find_elements(By.TAG_NAME, "td")
             row_data = {
